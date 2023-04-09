@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QiuHRenderer", "QiuHRenderer\QiuHRenderer.vcxproj", "{63822F91-0598-4B3F-88B9-76E32A5B4112}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Debug|x64.ActiveCfg = Debug|x64
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Debug|x64.Build.0 = Debug|x64
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Debug|x86.ActiveCfg = Debug|Win32
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Debug|x86.Build.0 = Debug|Win32
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Release|x64.ActiveCfg = Release|x64
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Release|x64.Build.0 = Release|x64
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Release|x86.ActiveCfg = Release|Win32
+		{63822F91-0598-4B3F-88B9-76E32A5B4112}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EFF1C681-6371-4CA1-ABD7-8A49509C836F}
+	EndGlobalSection
+EndGlobal

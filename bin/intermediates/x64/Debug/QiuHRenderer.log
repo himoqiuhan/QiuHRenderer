@@ -1,0 +1,10 @@
+﻿  Application.cpp
+Application.obj : error LNK2019: 无法解析的外部符号 __imp_glClear，函数 main 中引用了该符号
+Application.obj : error LNK2019: 无法解析的外部符号 glfwInit，函数 main 中引用了该符号
+Application.obj : error LNK2019: 无法解析的外部符号 glfwTerminate，函数 main 中引用了该符号
+Application.obj : error LNK2019: 无法解析的外部符号 glfwCreateWindow，函数 main 中引用了该符号
+Application.obj : error LNK2019: 无法解析的外部符号 glfwWindowShouldClose，函数 main 中引用了该符号
+Application.obj : error LNK2019: 无法解析的外部符号 glfwPollEvents，函数 main 中引用了该符号
+Application.obj : error LNK2019: 无法解析的外部符号 glfwMakeContextCurrent，函数 main 中引用了该符号
+Application.obj : error LNK2019: 无法解析的外部符号 glfwSwapBuffers，函数 main 中引用了该符号
+E:\dev\Renderer\QiuHRenderer\bin\x64\Debug\QiuHRenderer.exe : fatal error LNK1120: 8 个无法解析的外部命令
