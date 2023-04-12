@@ -18,5 +18,25 @@
     <ClCompile Include="src\Application.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rasterization\Draw.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexData\ModelLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\TinyRMath\Math.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Rasterization\Draw.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexData\ModelLoader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\TinyRMath\Math.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
