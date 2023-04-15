@@ -24,7 +24,10 @@
     <ClCompile Include="src\VertexData\ModelLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\vendor\TinyRMath\Math.cpp">
+    <ClCompile Include="src\vendor\Math\Math.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\Math\Matrix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +38,10 @@
     <ClInclude Include="src\VertexData\ModelLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\vendor\TinyRMath\Math.h">
+    <ClInclude Include="src\vendor\Math\Math.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\Math\Matrix.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

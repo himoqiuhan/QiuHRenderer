@@ -1,9 +1,6 @@
-#include <Eigen/Dense>
 #include <GLFW/glfw3.h>
 #include <tuple>
-#include "TinyRMath/Math.h"
-
-using namespace Eigen;
+#include "Math/Math.h"
 
 void DrawTriangle(Vec2i* vertex, Vec3f triangleColor);
 void DrawPixel(Vec2f pos, Vec3f color);

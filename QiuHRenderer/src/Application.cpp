@@ -2,6 +2,7 @@
 
 #include "Rasterization/Draw.h"
 #include "VertexData/ModelLoader.h"
+#include "Math/Matrix.h"
 
 int main(void)
 {
@@ -22,12 +23,31 @@ int main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
-	Vector2f Triangle[3] = { Vector2f(50,50),Vector2f(100,100), Vector2f(100,50) };
-	Vector3f TriangleColor(1, 1, 1);
-
 	Model* model = new Model("res/obj/african_head.obj");
 
 	Vec3f light_dir(0, 0, -1);
+
+
+
+
+	//------------------试验田--------------------
+	MVP::Transform transform;
+	transform.transition = Vec3f(0, 0, 0);
+	transform.rotate = Vec3f(0, 0, 0);
+	transform.scale = Vec3f(1, 1, 1);
+
+	Matrix MatModel = MVP::GetModelMatrix(transform);
+
+	MVP::Camera camera;
+	camera.position = Vec3f(0, 0, 1.5);
+	Matrix MatView = MVP::GetViewMatrix(camera);
+
+	Matrix MatPerspective = MVP::GetPerspectiveMatrix(camera);
+
+	Matrix Matrix_MVP = MatPerspective * MatView * MatModel;
+
+
+
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -41,7 +61,25 @@ int main(void)
 			Vec2i screen_coords[3];
 			Vec3f world_coords[3];
 			for (int j = 0; j < 3; j++) {
-				world_coords[j] = model->vert(face[j]);
+				mat<4, 1, float> colVector;
+				colVector[0][0] = model->vert(face[j]).x;
+				colVector[1][0] = model->vert(face[j]).y;
+				colVector[2][0] = model->vert(face[j]).z;
+				colVector[3][0] = 1;
+				world_coords[j] = Vec3f((Matrix_MVP * colVector)[0][0], (Matrix_MVP * colVector)[1][0], (Matrix_MVP * colVector)[2][0]);
+				world_coords[j] = world_coords[j] / (Matrix_MVP * colVector)[3][0];
+
+
+				/*std::cout << std::endl;
+				std::cout << "Result Vector Col Matrix: " << std::endl;
+				for (int i = 0; i < 4; i++)
+				{
+					std::cout << (Matrix_MVP * colVector)[i][0] << std::endl;
+					std::cout << std::endl;
+				}*/
+
+
+
 				screen_coords[j] = Vec2i((world_coords[j].x + 1.) * 640/2, (world_coords[j].y + 1.) * 480/2);//世界空间转化为屏幕空间
 			}
 			//根据世界空间计算当前面的法线

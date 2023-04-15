@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "TinyRMath/Math.h"
+#include "Math/Math.h"
 
 class Model {
 private:
