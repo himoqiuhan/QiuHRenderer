@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;src;src\vendor;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;src;src\vendor;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,14 +157,17 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Rasterization\Draw.cpp" />
-    <ClCompile Include="src\vendor\Math\Math.cpp" />
-    <ClCompile Include="src\vendor\Math\Matrix.cpp" />
+    <ClCompile Include="src\Rasterization\Rasterizer.cpp" />
+    <ClCompile Include="src\Support\Math\Math.cpp" />
+    <ClCompile Include="src\Support\Math\Matrix.cpp" />
     <ClCompile Include="src\VertexData\ModelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Rasterization\Draw.h" />
-    <ClInclude Include="src\vendor\Math\Math.h" />
-    <ClInclude Include="src\vendor\Math\Matrix.h" />
+    <ClInclude Include="src\Rasterization\Rasterizer.h" />
+    <ClInclude Include="src\Support\Information\BasicInformation.h" />
+    <ClInclude Include="src\Support\Math\Math.h" />
+    <ClInclude Include="src\Support\Math\Matrix.h" />
     <ClInclude Include="src\VertexData\ModelLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,18 +2,22 @@
 
 #include "Rasterization/Draw.h"
 #include "VertexData/ModelLoader.h"
-#include "Math/Matrix.h"
+#include "Support/Math/Matrix.h"
+
+#include "Support/Information/BasicInformation.h"
 
 int main(void)
 {
 	GLFWwindow* window;
+
+	Screen screen;
 
 	/* Initialize the library */
 	if (!glfwInit())
 		return -1;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(screen.width, screen.height, "QiuHRenderer", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -31,20 +35,20 @@ int main(void)
 
 
 	//------------------ ‘—ÈÃÔ--------------------
-	MVP::Transform transform;
+	Transform transform;
 	transform.transition = Vec3f(0, 0, 0);
 	transform.rotate = Vec3f(0, 0, 0);
 	transform.scale = Vec3f(1, 1, 1);
 
-	Matrix MatModel = MVP::GetModelMatrix(transform);
-
-	MVP::Camera camera;
-	camera.position = Vec3f(0, 0, 1.5);
-	Matrix MatView = MVP::GetViewMatrix(camera);
-
-	Matrix MatPerspective = MVP::GetPerspectiveMatrix(camera);
+	Matrix  MatModel = GetModelMatrix(transform);
+	Camera camera(screen);
+	camera.position = Vec3f(0, 0, 2);
+	Matrix MatView = GetViewMatrix(camera);
+	Matrix MatPerspective = GetPerspectiveMatrix(camera);
 
 	Matrix Matrix_MVP = MatPerspective * MatView * MatModel;
+	//------------------ ‘—ÈÃÔ--------------------
+
 
 
 

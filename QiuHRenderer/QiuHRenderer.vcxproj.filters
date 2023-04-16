@@ -24,10 +24,13 @@
     <ClCompile Include="src\VertexData\ModelLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\vendor\Math\Math.cpp">
+    <ClCompile Include="src\Support\Math\Math.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\vendor\Math\Matrix.cpp">
+    <ClCompile Include="src\Support\Math\Matrix.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rasterization\Rasterizer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +41,16 @@
     <ClInclude Include="src\VertexData\ModelLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\vendor\Math\Math.h">
+    <ClInclude Include="src\Support\Information\BasicInformation.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\vendor\Math\Matrix.h">
+    <ClInclude Include="src\Support\Math\Math.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Support\Math\Matrix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rasterization\Rasterizer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
