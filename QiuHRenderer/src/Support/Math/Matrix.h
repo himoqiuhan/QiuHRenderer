@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Math/Math.h"
+#include "Support/Math/Math.h"
 #include "Support/Information/BasicInformation.h"
 
 Matrix GetTransition(Vec3f transition);

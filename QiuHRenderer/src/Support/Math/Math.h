@@ -7,7 +7,9 @@
 
 template<size_t DimCols, size_t DimRows, typename T> class mat;
 
-template <size_t DIM, typename T> struct vec {
+template <size_t DIM, typename T> 
+struct vec 
+{
 	vec() { for (size_t i = DIM; i--; data_[i] = T()); }
 	T& operator[](const size_t i) { assert(i < DIM); return data_[i]; }
 	const T& operator[](const size_t i) const { assert(i < DIM); return data_[i]; }
@@ -17,7 +19,9 @@ private:
 
 /////////////////////////////////////////////////////////////////////////////////
 
-template <typename T> struct vec<2, T> {
+template <typename T> 
+struct vec<2, T> 
+{
 	vec() : x(T()), y(T()) {}
 	vec(T X, T Y) : x(X), y(Y) {}
 	template <class U> vec<2, T>(const vec<2, U>& v);
@@ -29,7 +33,9 @@ template <typename T> struct vec<2, T> {
 
 /////////////////////////////////////////////////////////////////////////////////
 
-template <typename T> struct vec<3, T> {
+template <typename T> 
+struct vec<3, T> 
+{
 	vec() : x(T()), y(T()), z(T()) {}
 	vec(T X, T Y, T Z) : x(X), y(Y), z(Z) {}
 	template <class U> vec<3, T>(const vec<3, U>& v);
@@ -83,11 +89,11 @@ template<size_t LEN, size_t DIM, typename T> vec<LEN, T> proj(const vec<DIM, T>&
 }
 
 template <typename T> vec<3, T> cross(vec<3, T> v1, vec<3, T> v2) {
-	return vec<3, T>(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+	return vec<3, T>(v1[1] * v2[2] - v1[2] * v2[1], v1[2] * v2[0] - v1[0] * v2[2], v1[0] * v2[1] - v1[1] * v2[0]);
 }
 
 template <typename T> float dot(vec<3, T> v1, vec<3, T> v2) {
-	return (float)(v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
+	return (float)(v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]);
 }
 
 template <size_t DIM, typename T> std::ostream& operator<<(std::ostream& out, vec<DIM, T>& v) {
@@ -99,19 +105,6 @@ template <size_t DIM, typename T> std::ostream& operator<<(std::ostream& out, ve
 
 /////////////////////////////////////////////////////////////////////////////////
 
-template<size_t DIM, typename T> struct dt {
-	static T det(const mat<DIM, DIM, T>& src) {
-		T ret = 0;
-		for (size_t i = DIM; i--; ret += src[0][i] * src.cofactor(0, i));
-		return ret;
-	}
-};
-
-template<typename T> struct dt<1, T> {
-	static T det(const mat<1, 1, T>& src) {
-		return src[0][0];
-	}
-};
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -147,10 +140,6 @@ public:
 		for (size_t i = DimRows; i--; )
 			for (size_t j = DimCols; j--; ret[i][j] = (i == j));
 		return ret;
-	}
-
-	T det() const {
-		return dt<DimCols, T>::det(*this);
 	}
 
 	mat<DimRows - 1, DimCols - 1, T> get_minor(size_t row, size_t col) const {
@@ -202,6 +191,13 @@ template<size_t R1, size_t C1, size_t C2, typename T>mat<R1, C2, T> operator*(co
 		for (size_t j = C2; j--; result[i][j] = lhs[i] * rhs.col(j));
 	return result;
 }
+
+//mat<4,1,float> operator*(const mat<4, 4, float>& lhs, const mat<4, 1, float>& rhs) {
+//	mat<4, 1, float> result;
+//	for (size_t i = 4; i--; )
+//		for (size_t j = 1; j--; result[i][j] = lhs[i] * rhs.col(j));
+//	return result;
+//}
 
 template<size_t DimRows, size_t DimCols, typename T>mat<DimCols, DimRows, T> operator/(mat<DimRows, DimCols, T> lhs, const T& rhs) {
 	for (size_t i = DimRows; i--; lhs[i] = lhs[i] / rhs);

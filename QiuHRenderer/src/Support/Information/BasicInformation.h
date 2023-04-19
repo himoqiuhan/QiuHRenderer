@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/Math.h"
+#include "Support/Math/Math.h"
 
 /// @brief 屏幕/窗口信息
 struct Screen
@@ -17,6 +17,13 @@ struct Transform
 	Vec3f transition = Vec3f(0, 0, 0);
 	Vec3f rotate = Vec3f(0, 0, 0);
 	Vec3f scale = Vec3f(1, 1, 1);
+
+	void SetTransform(Vec3f _transition, Vec3f _rotation, Vec3f _scale)
+	{
+		transition = _transition;
+		rotate = _rotation;
+		scale = _scale;
+	}
 };
 
 /// @brief 相机信息
@@ -30,7 +37,4 @@ struct Camera
 	float aspect = 16 / (float)9; //宽高比
 	float near = 0.1f; //近裁剪面距离
 	float far = 100.f;	//远裁剪面距离
-
-	Camera(){}
-	Camera(const Screen& screen) { aspect = screen.width / (float)screen.height; }
 };

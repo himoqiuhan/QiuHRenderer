@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void DrawTriangle(Vec2i* vertex, Vec3f triangleColor)
+void DrawTriangle(Vec3f* vertex, Vec3f triangleColor)
 {
 	//1.获取AABB盒
 	auto bbox = GetBoundingBox(vertex);
@@ -34,10 +34,10 @@ void DrawPixel(Vec2f pos, Vec3f color)
 	glEnd();
 }
 
-std::tuple<Vec2i, Vec2i> GetBoundingBox(Vec2i* vertex)
+std::tuple<Vec2i, Vec2i> GetBoundingBox(Vec3f* vertex)
 {
-	Vec2i bbox_min = vertex[0];
-	Vec2i bbox_max = vertex[0];
+	Vec2i bbox_min = Vec2i(vertex[0].x,vertex[0].y);
+	Vec2i bbox_max = Vec2i(vertex[0].x,vertex[0].y);
 	for (int i = 0; i < 3; i++)
 	{
 		if (vertex[i].x < bbox_min.x)
@@ -61,7 +61,7 @@ std::tuple<Vec2i, Vec2i> GetBoundingBox(Vec2i* vertex)
 	return { bbox_min, bbox_max };
 }
 
-Vec3f GetBarycentricCoordinates(Vec2i* triangleVertex, Vec2i target)
+Vec3f GetBarycentricCoordinates(Vec3f* triangleVertex, Vec2i target)
 {
 	//[u,v,1]和[AB,AC,PA]对应的x和y向量都垂直, (ABx,ACx,PAx)叉乘(ABy,ACy,PAy)即可得到重心坐标
 	Vec2f AB = Vec2f(triangleVertex[1].x - triangleVertex[0].x, triangleVertex[1].y - triangleVertex[0].y);
