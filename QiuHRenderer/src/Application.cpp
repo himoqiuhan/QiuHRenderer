@@ -72,7 +72,7 @@ int main(void)
 #ifdef DEBUG_SINGLEFRAME
 
 	glClear(GL_COLOR_BUFFER_BIT);
-	r.ExeRenderPipeline(model, light_dir);
+	r.ExeRenderPipeline(model, light_dir, screen);
 
 #else
 
