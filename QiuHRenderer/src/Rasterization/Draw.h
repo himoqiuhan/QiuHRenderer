@@ -1,6 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <tuple>
-#include "Math/Math.h"
+#include "Support/Math/Math.h"
 
 void DrawTriangle(Vec3f* vertex, Vec3f triangleColor);
 void DrawPixel(Vec2f pos, Vec3f color);

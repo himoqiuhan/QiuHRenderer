@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Rasterization\Draw.cpp" />
     <ClCompile Include="src\Rasterization\Rasterizer.cpp" />
     <ClCompile Include="src\Support\Math\Math.cpp" />
     <ClCompile Include="src\Support\Math\Matrix.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\VertexData\ModelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Rasterization\Draw.h" />
     <ClInclude Include="src\Rasterization\Rasterizer.h" />
     <ClInclude Include="src\Support\Information\BasicInformation.h" />
     <ClInclude Include="src\Support\Math\Math.h" />

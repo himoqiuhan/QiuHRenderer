@@ -1,6 +1,6 @@
 #include "Support/Math/Matrix.h"
 
-#define DEBUG
+#define DEBUG_MATRIX
 
 Matrix GetTransition(Vec3f transition)
 {
@@ -9,7 +9,7 @@ Matrix GetTransition(Vec3f transition)
 	ret[1][3] = transition.y;
 	ret[2][3] = transition.z;
 
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
 	std::cout << std::endl;
 	std::cout << "Transition Matrix: " << std::endl;
 	for (int i = 0; i < 4; i++)
@@ -50,7 +50,7 @@ Matrix GetRotation(Vec3f rotateRadian)
 	rotateZ[2][2] = 1;
 	rotateZ[3][3] = 1;
 
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
 	std::cout << std::endl;
 	Matrix ret;
 	ret = rotateX * rotateY * rotateZ;
@@ -76,7 +76,7 @@ Matrix GetScale(Vec3f scale)
 	ret[2][2] = scale.z;
 	ret[3][3] = 1;
 
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
 	std::cout << std::endl;
 	std::cout << "Scale Matrix: " << std::endl;
 	for (int i = 0; i < 4; i++)
@@ -95,7 +95,7 @@ Matrix GetScale(Vec3f scale)
 Matrix GetModelMatrix(const Transform& transform)
 {
 	Vec3f rotateRadian(transform.rotate.x * 3.14f / 180, transform.rotate.y * 3.14f / 180, transform.rotate.z * 3.14f / 180);
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
 	std::cout << std::endl;
 	Matrix ret;
 	ret = GetTransition(transform.transition) * GetScale(transform.scale) * GetRotation(rotateRadian);
@@ -119,7 +119,7 @@ Matrix GetViewMatrix(const Camera& camera)
 	t[1][3] = -camera.position.y;
 	t[2][3] = -camera.position.z;
 
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
 	std::cout << std::endl;
 	std::cout << "CameraTransition Matrix: " << std::endl;
 	for (int i = 0; i < 4; i++)
@@ -140,7 +140,7 @@ Matrix GetViewMatrix(const Camera& camera)
 	r[2][0] = -camera.g.x; r[2][1] = -camera.g.y; r[2][2] = -camera.g.z;
 	r[3][3] = 1;
 
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
 	std::cout << std::endl;
 	std::cout << "CameraRotation Matrix: " << std::endl;
 	for (int i = 0; i < 4; i++)
@@ -167,7 +167,7 @@ Matrix GetPerspectiveMatrix(const Camera& camera)
 	ret[2][3] = -2 * camera.far * camera.near / (camera.far - camera.near);
 	ret[3][2] = -1;
 
-#ifdef DEBUG
+#ifdef DEBUG_MATRIX
 	std::cout << std::endl;
 	std::cout << "Perspective Matrix: " << std::endl;
 	for (int i = 0; i < 4; i++)

@@ -33,6 +33,9 @@
     <ClCompile Include="src\Support\Math\Math.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rasterization\Draw.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexData\ModelLoader.h">
@@ -51,6 +54,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Support\Math\Triangle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rasterization\Draw.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

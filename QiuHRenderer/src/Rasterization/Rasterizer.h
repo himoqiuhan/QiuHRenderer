@@ -49,11 +49,13 @@ public:
 	void SetPerspective();
 	void SetOrthogonal();
 	void SetCamera(Vec3f _position, Vec3f _lookAt, Vec3f _lookUp, float _FOV, float _aspect, float _near, float _far);
+	void SetCamera(Vec3f _position, Vec3f _lookAt, Vec3f _lookUp);
 
-	void ExeRenderPipeline(Model* model, Vec3f light_dir);//执行渲染管线，其中包含模型的读取、顶点着色器、图片的读取和片元着色器，并且最终渲染到RenderTarget上
+	void ExeRenderPipeline(Model* model, Vec3f light_dir, Screen screen);//执行渲染管线，其中包含模型的读取、顶点着色器、图片的读取和片元着色器，并且最终渲染到RenderTarget上
 
 	appdata_base GetVertexData(Model* model, int vertexIndex);
 	v2f VertexShader(appdata_base v);
+	Vec3f ScreenMapping(Vec3f screen_coord, Screen screen);
 	color4 FragmentShader(v2f* i, Vec3f barycoord);
 
 	void DrawFrag(Vec2f pos, color4 color);
