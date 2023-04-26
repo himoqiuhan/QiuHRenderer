@@ -9,7 +9,7 @@ struct appdata_base
 {
 	Vec3f vertex;//顶点数据
 	Vec3f normal;//顶点法线
-	Vec3f texcoord;//顶点UV坐标
+	Vec2i texcoord;//顶点UV坐标
 };
 
 struct v2f
@@ -53,7 +53,7 @@ public:
 
 	void ExeRenderPipeline(Model* model, Vec3f light_dir, Screen screen);//执行渲染管线，其中包含模型的读取、顶点着色器、图片的读取和片元着色器，并且最终渲染到RenderTarget上
 
-	appdata_base GetVertexData(Model* model, int vertexIndex);
+	appdata_base GetVertexData(Model* model, Vec3i faceIndex);
 	v2f VertexShader(appdata_base v);
 	Vec3f ScreenMapping(Vec3f screen_coord, Screen screen);
 	color4 FragmentShader(v2f* i, Vec3f barycoord);

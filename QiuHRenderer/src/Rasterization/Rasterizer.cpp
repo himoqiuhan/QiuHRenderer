@@ -5,7 +5,7 @@
 
 Rasterizer::Rasterizer(const Screen& screen)
 {
-	//camera.aspect = screen.width / (float)screen.height;
+	camera.aspect = screen.width / (float)screen.height;
 	camera.position = Vec3f(0, 0, 2);
 }
 
@@ -81,7 +81,7 @@ void Rasterizer::ExeRenderPipeline(Model* model, Vec3f light_dir, Screen screen)
 	{
 		v2f vertexout[3];
 		//逐顶点执行VertexShader
-		std::vector<int> face = model->face(i);//指定当前遍历到的面
+		std::vector<Vec3i> face = model->face(i);//指定当前遍历到的面
 		for (int j = 0; j < 3; j++)
 		{
 			//遍历边上的每一个顶点，进行处理
@@ -141,10 +141,12 @@ void Rasterizer::ExeRenderPipeline(Model* model, Vec3f light_dir, Screen screen)
 	std::cout << std::endl;
 }
 
-appdata_base Rasterizer::GetVertexData(Model* model, int vertexIndex)
+appdata_base Rasterizer::GetVertexData(Model* model, Vec3i faceIndex)
 {
 	appdata_base ret;
-	ret.vertex = model->vert(vertexIndex);
+	ret.vertex = model->vertPos(faceIndex[0]);
+	ret.texcoord = model->vertUV(faceIndex[1]);
+	ret.normal = model->vertNormal(faceIndex[2]);
 
 	return ret;
 }

@@ -40,6 +40,7 @@ int main(void)
 
 	Rasterizer r(screen);
 	r.SetTransform(Vec3f(0, 0, 0), Vec3f(0, 0, 0), Vec3f(1, 1, 1));
+	
 	r.SetPerspective();
 
 	////------------------ÊÔÑéÌï--------------------
