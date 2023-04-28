@@ -27,9 +27,10 @@ std::tuple<Vec2i, Vec2i> GetBoudingBox(Vec3f* vertex)
 	return { bbox_min, bbox_max };
 }
 
-Vec3f GetBarycentricCoordinate(Vec3f* triangle, Vec2i targetFragment)
+Vec3f GetBarycentricCoordinate(Vec3f* triangle, Vec2f targetFragment)
 {
 	//[u,v,1]和[AB,AC,PA]对应的x和y向量都垂直, (ABx,ACx,PAx)叉乘(ABy,ACy,PAy)即可得到重心坐标
+	//此处重心坐标的使用为P = (1-u-v)*A + u*B + v*C
 	Vec2f AB = Vec2f(triangle[1].x - triangle[0].x, triangle[1].y - triangle[0].y);
 	Vec2f AC = Vec2f(triangle[2].x - triangle[0].x, triangle[2].y - triangle[0].y);
 	Vec2f PA = Vec2f(triangle[0].x - targetFragment.x, triangle[0].y - targetFragment.y);

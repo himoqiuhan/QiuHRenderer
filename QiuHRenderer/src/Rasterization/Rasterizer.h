@@ -9,14 +9,15 @@ struct appdata_base
 {
 	Vec3f vertex;//顶点数据
 	Vec3f normal;//顶点法线
-	Vec2i texcoord;//顶点UV坐标
+	Vec2f texcoord;//顶点UV坐标
 };
 
 struct v2f
 {
-	Vec4f screen_coord;//屏幕空间坐标
+	Vec4f clipPos;//裁剪空间坐标
 	Vec3f worldPos;//世界空间坐标
-	float PerspectiveCoefficient;//透视除法系数
+	Vec3f worldNromal;//世界空间顶点法线
+	Vec2f uv;//顶点UV坐标
 };
 
 struct color4 
@@ -25,6 +26,8 @@ struct color4
 	float g;
 	float b;
 	float a;
+	color4() : r(1), g(1), b(1), a(1) {};
+	color4(float R, float G, float B, float A) : r(R), g(G), b(B), a(A) {}
 };
 
 class Rasterizer
@@ -32,14 +35,18 @@ class Rasterizer
 private:
 	Transform transform;
 	Camera camera;
+	Screen screen;
 
 	Matrix Matrix_M;
 	Matrix Matrix_V;
 	Matrix Matrix_P;
 	Matrix Matrix_MVP;
 
-	Vec3f world_coords[3];
-	Vec3i screen_coords[3];
+	Vec3f worldLightDir;
+	std::vector<float> ZBuffer;
+
+	//DEBUG
+	int fragCounter = 0;
 
 public:
 	Rasterizer(const Screen& screen);//构造对象，指定摄像机
@@ -50,13 +57,23 @@ public:
 	void SetOrthogonal();
 	void SetCamera(Vec3f _position, Vec3f _lookAt, Vec3f _lookUp, float _FOV, float _aspect, float _near, float _far);
 	void SetCamera(Vec3f _position, Vec3f _lookAt, Vec3f _lookUp);
+	void SetCamera(Vec3f _position);
 
-	void ExeRenderPipeline(Model* model, Vec3f light_dir, Screen screen);//执行渲染管线，其中包含模型的读取、顶点着色器、图片的读取和片元着色器，并且最终渲染到RenderTarget上
+	void ExeRenderPipeline(Model* model, Vec3f light_dir);//执行渲染管线，其中包含模型的读取、顶点着色器、图片的读取和片元着色器，并且最终渲染到RenderTarget上
 
+	//Used In RenderPipeline
 	appdata_base GetVertexData(Model* model, Vec3i faceIndex);
 	v2f VertexShader(appdata_base v);
-	Vec3f ScreenMapping(Vec3f screen_coord, Screen screen);
+	bool canClip(Vec3f* homogeneousPos);
+	Vec3f ScreenMapping(Vec3f screen_coord);
 	color4 FragmentShader(v2f* i, Vec3f barycoord);
+
+	Vec3f ObjectToWorldNormal(Vec3f normal);
+	bool IsInTriangle(Vec2i frag, Vec3f* triangleVertex);
+	float GetFragHomogeneousDepth(float* triangleVertexDepths, Vec3f barycoord);
+	float GetFragW(float* triangleVertexW, Vec3f barycoord);
+
+	Vec3f GetFragNormalByVertNormal(Vec3f* triangleVertexNormals, Vec3f barycoord);
 
 	void DrawFrag(Vec2f pos, color4 color);
 

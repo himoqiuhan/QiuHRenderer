@@ -1,6 +1,6 @@
 #include "Support/Math/Matrix.h"
 
-#define DEBUG_MATRIX
+//#define DEBUG_MATRIX
 
 Matrix GetTransition(Vec3f transition)
 {

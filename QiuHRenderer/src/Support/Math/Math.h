@@ -49,6 +49,24 @@ struct vec<3, T>
 
 /////////////////////////////////////////////////////////////////////////////////
 
+template <typename T>
+struct vec<4, T>
+{
+	vec() : x(T()), y(T()), z(T()), w(T()) {}
+	vec(T X, T Y, T Z, T W) : x(X), y(Y), z(Z), w(W) {}
+	template <class U> vec<4, T>(const vec<4, U>& v);
+	T& operator[](const size_t i) { assert(i < 4); return i <= 0 ? x : (1 == i ? y : (2==i ? z : w)); }
+	const T& operator[](const size_t i) const { assert(i < 4); return i <= 0 ? x : (1 == i ? y : (2 == i ? z : w)); }
+	float norm() { return std::sqrt(x * x + y * y + z * z + w * w); }
+	vec<4, T>& normalize(T l = 1) { *this = (*this) * (l / norm()); return *this; }
+
+	vec<3, T> xyz() { return vec<3, T>(x, y, z); }
+
+	T x, y, z, w;
+};
+
+/////////////////////////////////////////////////////////////////////////////////
+
 template<size_t DIM, typename T> T operator*(const vec<DIM, T>& lhs, const vec<DIM, T>& rhs) {
 	T ret = T();
 	for (size_t i = DIM; i--; ret += lhs[i] * rhs[i]);
@@ -105,6 +123,19 @@ template <size_t DIM, typename T> std::ostream& operator<<(std::ostream& out, ve
 
 /////////////////////////////////////////////////////////////////////////////////
 
+template<size_t DIM, typename T> struct dt {
+	static T det(const mat<DIM, DIM, T>& src) {
+		T ret = 0;
+		for (size_t i = DIM; i--; ret += src[0][i] * src.cofactor(0, i));
+		return ret;
+	}
+};
+
+template<typename T> struct dt<1, T> {
+	static T det(const mat<1, 1, T>& src) {
+		return src[0][0];
+	}
+};
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -141,6 +172,11 @@ public:
 			for (size_t j = DimCols; j--; ret[i][j] = (i == j));
 		return ret;
 	}
+
+	T det() const {
+		return dt<DimCols, T>::det(*this);
+	}
+
 
 	mat<DimRows - 1, DimCols - 1, T> get_minor(size_t row, size_t col) const {
 		mat<DimRows - 1, DimCols - 1, T> ret;
@@ -192,12 +228,6 @@ template<size_t R1, size_t C1, size_t C2, typename T>mat<R1, C2, T> operator*(co
 	return result;
 }
 
-//mat<4,1,float> operator*(const mat<4, 4, float>& lhs, const mat<4, 1, float>& rhs) {
-//	mat<4, 1, float> result;
-//	for (size_t i = 4; i--; )
-//		for (size_t j = 1; j--; result[i][j] = lhs[i] * rhs.col(j));
-//	return result;
-//}
 
 template<size_t DimRows, size_t DimCols, typename T>mat<DimCols, DimRows, T> operator/(mat<DimRows, DimCols, T> lhs, const T& rhs) {
 	for (size_t i = DimRows; i--; lhs[i] = lhs[i] / rhs);
