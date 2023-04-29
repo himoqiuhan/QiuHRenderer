@@ -1,6 +1,16 @@
 # QiuHRenderer
 撸一个软光栅渲染器
 
+
+
+目标是过一遍光栅化渲染管线，所以不考虑算法优化，以及例如图片解码读取这些细分内容。
+
+用glfw实现窗口创建和像素点绘制，基础的数学库和TGA图片读取类改写自[TinyRenderer](https://github.com/ssloy/tinyrenderer)教程提供的数学库，其余实现流程全是自己手搓的
+
+内部自带的模型贴图来自Tiny Renderer和[崩坏：星穹铁道](https://www.aplaybox.com/u/516827875)官方
+
+
+
 ```伪代码
 //渲染架构：
 	//传入模型、读取光照信息
@@ -44,7 +54,7 @@
 
 ## devLog
 
-### 20230426-成功封装Render Pilpline
+### 成功封装Render Pilpline
 
 把Render Pipeline封装在了Rasterrizer中的ExeRenderPileline中，架构同最基本的渲染流水线架构：（Legacy，此版本与实际管线不合，已被迭代）
 
@@ -86,7 +96,7 @@
 
 
 
-### 20230428-修正Render Pipeline，实现正确的Clipping和ZBuffer
+### 修正Render Pipeline，实现正确的Clipping和ZBuffer
 
 ```伪代码
 //渲染架构：
@@ -133,7 +143,7 @@
 
 
 
-### 20230428-法线平滑
+### 法线平滑
 
 三角形的重心坐标不支持透视变换：屏幕空间上计算出来的片元的重心坐标与线性空间中计算出的片元对应的点的重心坐标不等，所以一些空间属性（法线、深度等）直接使用屏幕空间计算出的重心坐标进行插值是不正确的，需要利用透视除法的系数将重心坐标还原回线性空间，再在线性空间中进行插值。
 
@@ -149,9 +159,11 @@
 
 <img src="README.assets/image-20230429101202407.png" alt="image-20230429101202407" style="zoom:25%;" />
 
+<img src="README.assets/image-20230429135916422.png" alt="image-20230429135916422" style="zoom: 33%;" />
 
 
-### 20230429-贴图映射
+
+### 贴图映射
 
 在FragmentShader中，通过屏幕空间的三角形重心坐标插值计算出当前片元的UV坐标，根据UV坐标去读取贴图即可（使用了[TinyRenderer](https://github.com/ssloy/tinyrenderer)教程中提供的TGA图片读取类实现图片加载进入内存）
 
@@ -163,3 +175,14 @@
 
 
 
+### 加入FrameBuffer，实现基于深度、亮度的边缘检测
+
+这一步就很简单了，只需要创建一个color4类型的vector容器，接收Fragment Shader输出的color4。在渲染完模型之后再遍历FrameBuffer进行绘制即可。
+
+边缘检测则是通过计算当前像素上下左右四个像素点与当前像素点的深度/亮度差（快速模拟求导）来判断当前像素点是否处于边缘。
+
+<img src="README.assets/image-20230429134704415.png" alt="image-20230429134704415" style="zoom: 50%;" />
+
+深度图：
+
+<img src="README.assets/image-20230429141026025.png" alt="image-20230429141026025" style="zoom:33%;" />

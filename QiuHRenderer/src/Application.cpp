@@ -6,8 +6,9 @@
 
 //#define DEBUG_SINGLEFRAME
 
-#define RENDERTEST_BOW
+//#define RENDERTEST_BOW
 //#define RENDERTEST_BAT
+#define RENDERTEST_MARCH7TH
 //#define RENDERTEST_AFRICANHEAD
 
 int main(void)
@@ -53,6 +54,12 @@ int main(void)
 
 #endif // RENDERTEST_BOW
 
+#ifdef RENDERTEST_MARCH7TH
+
+	Model* model = new Model("res/obj/March7th.obj");
+	TGAImage* tex = new TGAImage("res/texture/bow.tga");
+
+#endif // RENDERTEST_MARCH7TH
 
 
 
@@ -79,7 +86,7 @@ int main(void)
 	while (!glfwWindowShouldClose(window))
 	{
 		//‰÷»æ…Ë÷√
-		temp += 1;
+		temp += 5;
 #ifdef RENDERTEST_AFRICANHEAD
 
 		r.SetTransform(Vec3f(0, 0, 0), Vec3f(0, temp, 0), Vec3f(1, 1, 1));
@@ -89,7 +96,7 @@ int main(void)
 
 #ifdef RENDERTEST_BAT
 
-		r.SetTransform(Vec3f(0, 0, 0), Vec3f(30, temp, 0), Vec3f(1, 1, 1));
+		r.SetTransform(Vec3f(-5, 2.5, 0), Vec3f(45, 0, 30), Vec3f(1, 1, 1));
 		r.SetCamera(Vec3f(0, 0, 25));
 
 #endif // RENDERTEST_BAT
@@ -101,14 +108,20 @@ int main(void)
 
 #endif // RENDERTEST_BOW
 
+#ifdef RENDERTEST_MARCH7TH
 
+		r.SetTransform(Vec3f(0, -12.5, 0), Vec3f(0, temp, 0), Vec3f(1, 1, 1));
+		r.SetCamera(Vec3f(0, 0, 24));
+
+#endif // RENDERTEST_MARCH7TH
 		
 		
-		r.SetPerspective();
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+
+
+		r.SetPerspective();
 
 		r.ExeRenderPipeline(model, tex, light_dir);
 

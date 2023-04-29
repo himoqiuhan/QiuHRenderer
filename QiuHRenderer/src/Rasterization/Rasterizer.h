@@ -29,6 +29,10 @@ struct color4
 	float a;
 	color4() : r(1), g(1), b(1), a(1) {};
 	color4(float R, float G, float B, float A) : r(R), g(G), b(B), a(A) {}
+	color4 operator*(float num) { return color4(r * num, g * num, b * num, a * num); }
+	color4 operator*(color4 other) { return color4(r * other.r, g * other.g, b * other.b, a * other.a); }
+	color4 operator+(color4 other) { return color4(r + other.r, g + other.g, b + other.b, a + other.a); }
+	color4 AddContrast(float power) { return color4(std::pow(r, power), std::pow(g, power), std::pow(b, power), 1.f); }
 };
 
 class Rasterizer
@@ -48,6 +52,8 @@ private:
 	TGAImage* diffuseTex;
 
 	std::vector<float> ZBuffer;
+	std::vector<color4> FrameBuffer;
+	std::vector<float> LuminanceBuffer;
 
 	//DEBUG
 	int fragCounter = 0;
@@ -81,6 +87,4 @@ public:
 	Vec3f GetFragNormalByVertNormal(Vec3f* triangleVertexNormals, Vec3f barycoord);
 
 	void DrawFrag(Vec2f pos, color4 color);
-
-	
 };

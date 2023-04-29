@@ -7,11 +7,21 @@
 
 //#define FLATSHADER
 
+//#define NONLIGHT//无光照
+
+#define DEFERREDRENDERING_ON
+#define SHOWDEPTHBUFFER//必须开启DeferredRendering才可见
+//#define DEPTHBASEDOUTLINE_ON//基于场景深度的描边效果，必须开启DeferredRendering
+//#define LUMINANCEBASEDOUTLINE_ON//基于场景亮度的描边效果，必须开启DeferredRendering
+
 Rasterizer::Rasterizer(const Screen& screen)
 {
 	camera.aspect = screen.width / (float)screen.height;
 	this->screen = screen;
 	ZBuffer.resize(screen.width * screen.height);
+	FrameBuffer.resize(screen.width * screen.height);
+	LuminanceBuffer.resize(screen.width * screen.height);
+
 	std::fill(ZBuffer.begin(), ZBuffer.end(), 99);
 }
 
@@ -216,14 +226,74 @@ void Rasterizer::ExeRenderPipeline(Model* model, TGAImage* diffuse, Vec3f light_
 					fragCounter++;
 
 					if (FragColor.r == -1 || FragColor.g == -1 || FragColor.b == -1) continue;
-						
+					
+#ifdef DEFERREDRENDERING_ON
+					//写入FrameBuffer
+					FrameBuffer[y * screen.width + x] = FragColor;
+#ifdef LUMINANCEBASEDOUTLINE_ON
+					//写入亮度LuminanceBuffer
+					LuminanceBuffer[y * screen.width + x] = FragColor.r * 0.2125 + FragColor.g * 0.7154 + FragColor.b * 0.0721;
+#endif // LUMINANCEBASEDOUTLINE_ON
+
+#else
 					DrawFrag(Vec2f(x + .5, y + .5), FragColor);
+#endif // DEFERREDRENDERING_ON
+	
 				}
 			}
 		}
 	}
+#ifdef DEFERREDRENDERING_ON
+	for (int y = 0; y < screen.height; y++)
+	{
+		for (int x = 0; x < screen.width; x++)
+		{
+#ifdef SHOWDEPTHBUFFER
+			DrawFrag(Vec2f(x + .5, y + .5), color4(ZBuffer[y * screen.width + x] / 120, ZBuffer[y * screen.width + x] / 120, ZBuffer[y * screen.width + x] / 120, 1.f).AddContrast(.5));
+#else
+#ifdef DEPTHBASEDOUTLINE_ON
+			if (y > 1 && y < screen.height - 1 && x > 1 && x < screen.width - 1)
+			{
+				if ((std::abs((ZBuffer[y * screen.width + x + 1] - ZBuffer[(y - 1) * screen.width + x - 1]))/(float)2 > .2f)
+					|| (std::abs((ZBuffer[y * screen.width + x + 1] - ZBuffer[(y + 1) * screen.width + x - 1]))/(float)2 > .2f)
+					|| (std::abs((ZBuffer[y * screen.width + x + 1] - ZBuffer[y * screen.width + x - 1])) / (float)2 > .2f)
+					|| (std::abs((ZBuffer[(y + 1) * screen.width + x] - ZBuffer[(y - 1) * screen.width + x])) / (float)2 > .2f))
+					DrawFrag(Vec2f(x + .5, y + .5), color4(1, 1, 1, 1));
+				else
+					DrawFrag(Vec2f(x + .5, y + .5), FrameBuffer[y * screen.width + x]);
+			}
+			else
+				DrawFrag(Vec2f(x + .5, y + .5), FrameBuffer[y * screen.width + x]);
+#else
+#ifdef LUMINANCEBASEDOUTLINE_ON
+			if (y > 1 && y < screen.height - 1 && x > 1 && x < screen.width - 1)
+			{
+				if ((std::abs((LuminanceBuffer[(y + 1) * screen.width + x ] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f)
+					|| (std::abs((LuminanceBuffer[(y - 1) * screen.width + x] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f)
+					|| (std::abs((LuminanceBuffer[y * screen.width + x + 1] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f)
+					|| (std::abs((LuminanceBuffer[y * screen.width + x - 1] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f))
+					DrawFrag(Vec2f(x + .5, y + .5), color4(1, 1, 1, 1));
+				else
+					DrawFrag(Vec2f(x + .5, y + .5), FrameBuffer[y * screen.width + x]);
+		}
+			else
+				DrawFrag(Vec2f(x + .5, y + .5), FrameBuffer[y * screen.width + x]);
+#else
+			DrawFrag(Vec2f(x + .5, y + .5), FrameBuffer[y * screen.width + x]);
+#endif // LUMINANCEBASEDOUTLINE_ON
 
+#endif // DEPTHBASEOUTLINE_ON
+#endif // SHOWDEPTHBUFFER			
+		}
+	}
+#endif // DEFERREDRENDERING_ON
+
+	
+
+	//重置缓存区
 	std::fill(ZBuffer.begin(), ZBuffer.end(), 99);
+	std::fill(FrameBuffer.begin(), FrameBuffer.end(), color4(0,0,0,0));
+	std::fill(LuminanceBuffer.begin(), LuminanceBuffer.end(), 0);
 
 	std::cout << "执行Fragment Shader 数量：" << fragCounter << std::endl;
 	fragCounter = 0;
@@ -335,8 +405,14 @@ color4 Rasterizer::FragmentShader(v2f* i, float FragW, Vec3f barycoord)
 
 	float intensity = dot(worldNormalDir, worldLightDir);
 
-	return { worldNormalDir.x , worldNormalDir.y, worldNormalDir.z, 1 };
-	/*return { diffuse.x / (float)255 * intensity , diffuse.y / (float)255 * intensity , diffuse.z / (float)255 * intensity, 1 };*/
+	intensity = (intensity + 1) * .5;
+
+#ifdef NONLIGHT
+	intensity = 1.f;
+#endif // NONLIGHT
+
+	//return { worldNormalDir.x , worldNormalDir.y, worldNormalDir.z, 1 };
+	return { diffuse.x / (float)255 * intensity , diffuse.y / (float)255 * intensity , diffuse.z / (float)255 * intensity, 1 };
 
 #endif // FLATSHADER
 
@@ -426,4 +502,3 @@ void Rasterizer::DrawFrag(Vec2f pos, color4 color)
 	glVertex2f(posx, posy);
 	glEnd();
 }
-
