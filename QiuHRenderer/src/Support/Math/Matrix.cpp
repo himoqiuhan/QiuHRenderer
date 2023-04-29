@@ -159,7 +159,6 @@ Matrix GetViewMatrix(const Camera& camera)
 Matrix GetPerspectiveMatrix(const Camera& camera)
 {
 	float cot = 1.0f / std::tan((camera.FOV / 2.0f) * 3.14f / 180);
-	std::cout << "COT:" << cot << std::endl; std::cout << "ASPECT:" << camera.aspect << std::endl;
 	Matrix ret;
 	ret[0][0] = cot / camera.aspect;
 	ret[1][1] = cot;

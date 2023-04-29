@@ -36,6 +36,9 @@
     <ClCompile Include="src\Rasterization\Draw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\VertexData\TGALoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexData\ModelLoader.h">
@@ -57,6 +60,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Rasterization\Draw.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexData\TGALoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

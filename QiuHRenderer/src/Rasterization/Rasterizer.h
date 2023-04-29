@@ -4,6 +4,7 @@
 #include "Support/Information/BasicInformation.h"
 #include "Support/Math/Triangle.h"
 #include "Support/Math/Matrix.h"
+#include "VertexData/TGALoader.h"
 
 struct appdata_base
 {
@@ -43,6 +44,9 @@ private:
 	Matrix Matrix_MVP;
 
 	Vec3f worldLightDir;
+
+	TGAImage* diffuseTex;
+
 	std::vector<float> ZBuffer;
 
 	//DEBUG
@@ -59,19 +63,20 @@ public:
 	void SetCamera(Vec3f _position, Vec3f _lookAt, Vec3f _lookUp);
 	void SetCamera(Vec3f _position);
 
-	void ExeRenderPipeline(Model* model, Vec3f light_dir);//执行渲染管线，其中包含模型的读取、顶点着色器、图片的读取和片元着色器，并且最终渲染到RenderTarget上
+	void ExeRenderPipeline(Model* model, TGAImage* diffuse, Vec3f light_dir);//执行渲染管线，其中包含模型的读取、顶点着色器、图片的读取和片元着色器，并且最终渲染到RenderTarget上
 
 	//Used In RenderPipeline
 	appdata_base GetVertexData(Model* model, Vec3i faceIndex);
 	v2f VertexShader(appdata_base v);
 	bool canClip(Vec3f* homogeneousPos);
 	Vec3f ScreenMapping(Vec3f screen_coord);
-	color4 FragmentShader(v2f* i, Vec3f barycoord);
-
-	Vec3f ObjectToWorldNormal(Vec3f normal);
 	bool IsInTriangle(Vec2i frag, Vec3f* triangleVertex);
 	float GetFragHomogeneousDepth(float* triangleVertexDepths, Vec3f barycoord);
 	float GetFragW(float* triangleVertexW, Vec3f barycoord);
+	color4 FragmentShader(v2f* i, float fragW, Vec3f barycoord);
+	//Used In Vertex Shader
+	Vec3f ObjectToWorldNormal(Vec3f normal);
+	
 
 	Vec3f GetFragNormalByVertNormal(Vec3f* triangleVertexNormals, Vec3f barycoord);
 

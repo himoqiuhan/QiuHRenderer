@@ -1,1 +1,61 @@
-﻿
+﻿  Application.cpp
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Application.cpp(87,47): warning C4244: “参数”: 从“int”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+  Rasterizer.cpp
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(196,88): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(196,82): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(216,32): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(216,24): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(298,92): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(298,51): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(354,30): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(354,17): warning C4244: “参数”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\include\xutility(4519,24): warning C4244: “=”: 从“const _Ty”转换到“float”，可能丢失数据
+          with
+          [
+              _Ty=int
+          ]
+E:\dev\Renderer\QiuHRenderer\QiuHRenderer\src\Rasterization\Rasterizer.cpp(14): message : 查看对正在编译的函数 模板 实例化“void std::fill<std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>,int>(const _FwdIt,const _FwdIt,const int &)”的引用
+          with
+          [
+              _Ty=float,
+              _FwdIt=std::_Vector_iterator<std::_Vector_val<std::_Simple_types<float>>>
+          ]
+  正在生成代码...
+LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+  QiuHRenderer.vcxproj -> E:\dev\Renderer\QiuHRenderer\bin\Win32\Debug\QiuHRenderer.exe

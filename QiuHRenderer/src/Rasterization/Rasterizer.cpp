@@ -3,8 +3,9 @@
 //#define DEBUG_VERT
 //#define DEBUG_DATASTREAMING
 //#define DEBUG_FRAG
+//#define DEBUG_TEXTUREREADING
 
-#define FLATSHADER
+//#define FLATSHADER
 
 Rasterizer::Rasterizer(const Screen& screen)
 {
@@ -60,10 +61,10 @@ void Rasterizer::SetCamera(Vec3f _position)
 	camera.position = _position;
 }
 
-void Rasterizer::ExeRenderPipeline(Model* model, Vec3f light_dir)
+void Rasterizer::ExeRenderPipeline(Model* model, TGAImage* diffuse, Vec3f light_dir)
 {
 	//渲染架构：
-	//传入模型、读取光照信息
+	//传入模型、读取光照信息、贴图信息
 	//--for(每个面)
 	//		定义v2f结构体数组
 	//		
@@ -99,7 +100,8 @@ void Rasterizer::ExeRenderPipeline(Model* model, Vec3f light_dir)
 	//				continue
 	//		----
 
-	worldLightDir = light_dir;
+	worldLightDir = light_dir * -1.f;
+	this->diffuseTex = diffuse;
 
 	std::cout << std::endl;
 	std::cout << "|||||||||||||||||||ExeRenderPipeline 单帧开始|||||||||||||||||||" << std::endl;
@@ -209,12 +211,13 @@ void Rasterizer::ExeRenderPipeline(Model* model, Vec3f light_dir)
 				{
 					//深度值更小，则更新ZBuffer，计算FragmentShader并渲染当前frag
 					ZBuffer[y * screen.width + x] = depth;
-					color4 FragColor = FragmentShader(vertexout, BarycentricCoordinate);
+					color4 FragColor = FragmentShader(vertexout, fragW, BarycentricCoordinate);
+
 					fragCounter++;
-					if (FragColor.r > .2)
-					{
-						DrawFrag(Vec2f(x + .5, y + .5), FragColor);
-					}
+
+					if (FragColor.r == -1 || FragColor.g == -1 || FragColor.b == -1) continue;
+						
+					DrawFrag(Vec2f(x + .5, y + .5), FragColor);
 				}
 			}
 		}
@@ -298,20 +301,42 @@ Vec3f Rasterizer::ScreenMapping(Vec3f screen_coord)
 	return Vec3f((screen_coord.x + 1.) * screen.width/2, (screen_coord.y + 1.) * screen.height/2, screen_coord.z);
 }
 
-color4 Rasterizer::FragmentShader(v2f* i, Vec3f barycoord)
+color4 Rasterizer::FragmentShader(v2f* i, float FragW, Vec3f barycoord)
 {
 
-#ifdef FLATSHADER
+	//读取贴图
+	Vec2f fragUV = i[0].uv * barycoord[0] + i[1].uv * barycoord[1] + i[2].uv * barycoord[2];
+	TGAColor tex = diffuseTex->get(fragUV.x * diffuseTex->width(), fragUV.y * diffuseTex->height());
+	Vec3f diffuse = Vec3f(tex.bgra[2], tex.bgra[1], tex.bgra[0]);
 
-	Vec3f n = cross((i[2].worldPos - i[0].worldPos), (i[1].worldPos - i[0].worldPos));
+#ifdef DEBUG_TEXTUREREADING
+
+	std::cout << "Fragment Texture Reading: ";
+	std::cout << "UV: " << fragUV << "  ||  " << "Color: " << diffuse << std::endl;
+
+#endif // DEBUG_TEXTUREREADING
+
+#ifdef FLATSHADER	
+
+	Vec3f n = cross((i[1].worldPos - i[0].worldPos), (i[2].worldPos - i[0].worldPos));
 	n.normalize();
 	float intensity = dot(n, worldLightDir);
 
+	if (intensity < .2f) return { -1, -1, -1, -1 };
+
+	return { diffuse.x/(float)255 * intensity , diffuse.y/(float)255 * intensity , diffuse.z/(float)255 * intensity, 1};
+
 #else
 
-	Vec3f TriangleVertexNormals[3] = { i[0].worldNromal, i[1].worldNromal, i[2].worldNromal };
-	Vec3f worldNormalDir = GetFragNormalByVertNormal(TriangleVertexNormals, barycoord);
+	Vec3f linearBarycoord = barycoord * FragW;
+
+	Vec3f vertexWorldSpaceNormals[3] = { i[0].worldNromal, i[1].worldNromal, i[2].worldNromal };
+	Vec3f worldNormalDir = GetFragNormalByVertNormal(vertexWorldSpaceNormals, linearBarycoord).normalize();
+
 	float intensity = dot(worldNormalDir, worldLightDir);
+
+	return { worldNormalDir.x , worldNormalDir.y, worldNormalDir.z, 1 };
+	/*return { diffuse.x / (float)255 * intensity , diffuse.y / (float)255 * intensity , diffuse.z / (float)255 * intensity, 1 };*/
 
 #endif // FLATSHADER
 
@@ -322,8 +347,6 @@ color4 Rasterizer::FragmentShader(v2f* i, Vec3f barycoord)
 	std::cerr << "Light Intensity = " << intensity << std::endl;
 #endif // DEBUG_FRAG
 
-
-	return { intensity , intensity , intensity , 1};
 }
 
 Vec3f Rasterizer::ObjectToWorldNormal(Vec3f normal)
@@ -370,9 +393,6 @@ Vec3f Rasterizer::GetFragNormalByVertNormal(Vec3f* triangleVertexNormals, Vec3f 
 {
 	Vec3f ret;
 	ret = triangleVertexNormals[0] * barycoord[0] + triangleVertexNormals[1] * barycoord[1] + triangleVertexNormals[2] * barycoord[2];
-	//ret.x = barycoord[0] * triangleVertexNormals[0].x + barycoord[1] * triangleVertexNormals[1].x + barycoord[2] * triangleVertexNormals[2].x;
-	//ret.y = barycoord[0] * triangleVertexNormals[0].y + barycoord[1] * triangleVertexNormals[1].y + barycoord[2] * triangleVertexNormals[2].y;
-	//ret.z = barycoord[0] * triangleVertexNormals[0].z + barycoord[1] * triangleVertexNormals[1].z + barycoord[2] * triangleVertexNormals[2].z;
 	return ret;
 }
 

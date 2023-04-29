@@ -1,17 +1,14 @@
 #include <GLFW/glfw3.h>
 
-//#include "Rasterization/Draw.h"
-//#include "VertexData/ModelLoader.h"
-//#include "Support/Math/Matrix.h"
-//
-//#include "Support/Information/BasicInformation.h"
-
 #include "Rasterization/Draw.h"
 
 #include "Rasterization/Rasterizer.h"
 
 //#define DEBUG_SINGLEFRAME
-//#define LEGACY
+
+#define RENDERTEST_BOW
+//#define RENDERTEST_BAT
+//#define RENDERTEST_AFRICANHEAD
 
 int main(void)
 {
@@ -34,64 +31,86 @@ int main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
-	//Model* model = new Model("res/obj/african_head.obj");
-	Model* model = new Model("res/obj/March7th.obj");
+	//对象信息
+#ifdef RENDERTEST_AFRICANHEAD
 
+	Model* model = new Model("res/obj/african_head.obj");
+	TGAImage* tex = new TGAImage("res/texture/african_head_diffuse.tga");
+
+#endif // RENDERTEST_AFRICANHEAD
+
+#ifdef RENDERTEST_BAT
+
+	Model* model = new Model("res/obj/bat.obj");
+	TGAImage* tex = new TGAImage("res/texture/bat.tga");
+
+#endif // RENDERTEST_BAT
+
+#ifdef RENDERTEST_BOW
+
+	Model* model = new Model("res/obj/bow.obj");
+	TGAImage* tex = new TGAImage("res/texture/bow.tga");
+
+#endif // RENDERTEST_BOW
+
+
+
+
+	//场景信息
 	Vec3f light_dir(0, 0, -1);
-
-	Rasterizer r(screen);
-	r.SetTransform(Vec3f(0, 0, 0), Vec3f(10, 30, 45), Vec3f(1, 1, 1));
-	r.SetCamera(Vec3f(0, 0, 25));
-	r.SetPerspective();
-	int temp = 0;
-
-	////------------------试验田--------------------
-
-#ifdef LEGACY
-
-	Transform transform;
-	transform.transition = Vec3f(0, 0, 0);
-	transform.rotate = Vec3f(0, 0, 0);
-	transform.scale = Vec3f(1, 1, 1);
-
-	Matrix  MatModel = GetModelMatrix(transform);
-	Camera camera;
-	camera.position = Vec3f(0, 0, 2);
-	Matrix MatView = GetViewMatrix(camera);
-	Matrix MatPerspective = GetPerspectiveMatrix(camera);
-
-	Matrix Matrix_MVP = MatPerspective * MatView * MatModel;
-
-	std::cout << "|||||||||||||||||||摄像机基本信息： " << "position: " << camera.position << " LookAt: " << camera.g << " LookUp: " << camera.t << std::endl;
-
-#endif // LEGACY
-
-	////------------------试验田--------------------
-
 	Vec3f CameraPos;
 
+	//声明光栅化器
+	Rasterizer r(screen);
+	r.SetTransform(Vec3f(0, 0, 0), Vec3f(10, 30, 45), Vec3f(1, 1, 1));
+	
+	r.SetPerspective();
+	int temp = 0;
 
 
 #ifdef DEBUG_SINGLEFRAME
 
 	glClear(GL_COLOR_BUFFER_BIT);
-	r.ExeRenderPipeline(model, light_dir);
+	r.ExeRenderPipeline(modelBow, light_dir);
 
 #else
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
+		//渲染设置
+		temp += 1;
+#ifdef RENDERTEST_AFRICANHEAD
 
-		temp += 5;
+		r.SetTransform(Vec3f(0, 0, 0), Vec3f(0, temp, 0), Vec3f(1, 1, 1));
+		r.SetCamera(Vec3f(0, 0, 4));
+
+#endif // RENDERTEST_AFRICANHEAD
+
+#ifdef RENDERTEST_BAT
+
+		r.SetTransform(Vec3f(0, 0, 0), Vec3f(30, temp, 0), Vec3f(1, 1, 1));
+		r.SetCamera(Vec3f(0, 0, 25));
+
+#endif // RENDERTEST_BAT
+
+#ifdef RENDERTEST_BOW
+
 		r.SetTransform(Vec3f(0, -12.5, 0), Vec3f(0, temp, 0), Vec3f(1, 1, 1));
+		r.SetCamera(Vec3f(0, 0, 25));
+
+#endif // RENDERTEST_BOW
+
+
+		
+		
 		r.SetPerspective();
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 
-		r.ExeRenderPipeline(model, light_dir);
+		r.ExeRenderPipeline(model, tex, light_dir);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
