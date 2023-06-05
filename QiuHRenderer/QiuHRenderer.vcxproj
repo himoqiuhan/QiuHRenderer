@@ -163,6 +163,12 @@
     <ClCompile Include="src\Support\Math\Math.cpp" />
     <ClCompile Include="src\Support\Math\Matrix.cpp" />
     <ClCompile Include="src\Support\Math\Triangle.cpp" />
+    <ClCompile Include="src\vendor\imgui\imgui.cpp" />
+    <ClCompile Include="src\vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\vendor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\VertexData\ModelLoader.cpp" />
     <ClCompile Include="src\VertexData\TGALoader.cpp" />
   </ItemGroup>
@@ -173,6 +179,15 @@
     <ClInclude Include="src\Support\Math\Math.h" />
     <ClInclude Include="src\Support\Math\Matrix.h" />
     <ClInclude Include="src\Support\Math\Triangle.h" />
+    <ClInclude Include="src\vendor\imgui\imconfig.h" />
+    <ClInclude Include="src\vendor\imgui\imgui.h" />
+    <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\vendor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\vendor\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="src\vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\VertexData\ModelLoader.h" />
     <ClInclude Include="src\VertexData\TGALoader.h" />
   </ItemGroup>

@@ -4,6 +4,10 @@
 
 #include "Rasterization/Rasterizer.h"
 
+#include "vendor/imgui/imgui.h"
+#include "vendor/imgui/imgui_impl_glfw.h"
+#include "vendor/imgui/imgui_impl_opengl3.h"
+
 //#define DEBUG_SINGLEFRAME
 
 //#define RENDERTEST_BOW
@@ -74,6 +78,17 @@ int main(void)
 	r.SetPerspective();
 	int temp = 0;
 
+	//初始化ImGui
+	const char* glsl_version = "#version 130";
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+
+	bool show_demo_window = true;
+	bool show_another_window = false;
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
 
 #ifdef DEBUG_SINGLEFRAME
 
@@ -86,7 +101,8 @@ int main(void)
 	while (!glfwWindowShouldClose(window))
 	{
 		//渲染设置
-		temp += 5;
+		temp += 5;		
+
 #ifdef RENDERTEST_AFRICANHEAD
 
 		r.SetTransform(Vec3f(0, 0, 0), Vec3f(0, temp, 0), Vec3f(1, 1, 1));
@@ -115,15 +131,39 @@ int main(void)
 
 #endif // RENDERTEST_MARCH7TH
 		
-		
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
-
 		r.SetPerspective();
 
 		r.ExeRenderPipeline(model, tex, light_dir);
+
+		//ImGui窗口的设置
+		{
+			static float f = 0.0f;
+			static int counter = 0;
+			ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
+			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
+			ImGui::Checkbox("Another Window", &show_another_window);
+
+			if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+				counter++;
+			ImGui::SameLine();
+			ImGui::Text("counter = %d", counter);
+
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		}
+
+		//ImGui渲染
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
@@ -134,6 +174,11 @@ int main(void)
 
 
 #endif //DEBUG_SINGLEFRAME
+
+	// Cleanup ImGui
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	glfwTerminate();
 
