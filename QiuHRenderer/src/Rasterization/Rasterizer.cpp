@@ -254,8 +254,8 @@ void Rasterizer::ExeRenderPipeline(Model* model, TGAImage* diffuse, Vec3f light_
 #ifdef DEPTHBASEDOUTLINE_ON
 			if (y > 1 && y < screen.height - 1 && x > 1 && x < screen.width - 1)
 			{
-				if ((std::abs((ZBuffer[y * screen.width + x + 1] - ZBuffer[(y - 1) * screen.width + x - 1]))/(float)2 > .2f)
-					|| (std::abs((ZBuffer[y * screen.width + x + 1] - ZBuffer[(y + 1) * screen.width + x - 1]))/(float)2 > .2f)
+				if ((std::abs((ZBuffer[(y + 1) * screen.width + x + 1] - ZBuffer[(y - 1) * screen.width + x - 1]))/(float)2.8 > .2f)
+					|| (std::abs((ZBuffer[(y - 1) * screen.width + x + 1] - ZBuffer[(y + 1) * screen.width + x - 1]))/(float)2.8 > .2f)
 					|| (std::abs((ZBuffer[y * screen.width + x + 1] - ZBuffer[y * screen.width + x - 1])) / (float)2 > .2f)
 					|| (std::abs((ZBuffer[(y + 1) * screen.width + x] - ZBuffer[(y - 1) * screen.width + x])) / (float)2 > .2f))
 					DrawFrag(Vec2f(x + .5, y + .5), color4(1, 1, 1, 1));
@@ -268,10 +268,10 @@ void Rasterizer::ExeRenderPipeline(Model* model, TGAImage* diffuse, Vec3f light_
 #ifdef LUMINANCEBASEDOUTLINE_ON
 			if (y > 1 && y < screen.height - 1 && x > 1 && x < screen.width - 1)
 			{
-				if ((std::abs((LuminanceBuffer[(y + 1) * screen.width + x ] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f)
-					|| (std::abs((LuminanceBuffer[(y - 1) * screen.width + x] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f)
-					|| (std::abs((LuminanceBuffer[y * screen.width + x + 1] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f)
-					|| (std::abs((LuminanceBuffer[y * screen.width + x - 1] - LuminanceBuffer[y * screen.width + x]))/(float)2 > .05f))
+				if ((std::abs((LuminanceBuffer[(y + 1) * screen.width + x + 1 ] - LuminanceBuffer[(y - 1) * screen.width + x - 1]))/(float)2.8 > .05f)
+					|| (std::abs((LuminanceBuffer[(y - 1) * screen.width + x + 1] - LuminanceBuffer[(y + 1) * screen.width + x - 1]))/(float)2.8 > .05f)
+					|| (std::abs((LuminanceBuffer[y * screen.width + x + 1] - LuminanceBuffer[y * screen.width + x - 1]))/(float)2 > .05f)
+					|| (std::abs((LuminanceBuffer[(y + 1) * screen.width + x] - LuminanceBuffer[(y - 1) * screen.width + x]))/(float)2 > .05f))
 					DrawFrag(Vec2f(x + .5, y + .5), color4(1, 1, 1, 1));
 				else
 					DrawFrag(Vec2f(x + .5, y + .5), FrameBuffer[y * screen.width + x]);
